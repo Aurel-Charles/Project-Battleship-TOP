@@ -78,6 +78,18 @@ describe('Board Testing', () => {
         boardA = new Board();
         boardA.placeShip(4, [0, 0], 'horizontal');
     });
+    test('rejects fixed axis out of bounds (horizontal)', () => {
+        expect(boardA.checkPlace(4, [10, 0], 'horizontal')).toEqual(false)
+    })
+    test('rejects fixed axis out of bounds (vertical)', () => {
+        expect(boardA.checkPlace(4, [0, 10], 'vertical')).toEqual(false)
+    })
+    test('accepts ship placed exactly at the far edge (horizontal)', () => {
+        expect(boardA.checkPlace(4, [0, 6], 'horizontal')).toEqual(true)
+    })
+    test('rejects ship that overflows by one (horizontal)', () => {
+        expect(boardA.checkPlace(4, [0, 7], 'horizontal')).toEqual(false)
+    })
 
     test('check receivAttack() missing a hit', () => {
         expect(boardA.receiveAttack(1, 0)).toEqual(false);
@@ -113,5 +125,4 @@ describe('Board Testing', () => {
         boardA.receiveAttack(0, 2)
         expect(boardA.numberOfShipsSunk).toEqual(0);
     });
-
 });

@@ -75,7 +75,10 @@ export class Board {
             return false
         }
         if (direction === 'horizontal') {
-            if (coorY >= this.rows - shipLength) {
+            if (coorY > this.rows - shipLength) {
+                return false
+            }
+            if (coorX >= this.rows) {
                 return false
             }
             for (let i = 0; i < shipLength; i++) {
@@ -85,7 +88,10 @@ export class Board {
             }
         }
         if (direction === 'vertical') {
-            if (coorX >= this.colums - shipLength) {
+            if (coorX > this.colums - shipLength) {
+                return false
+            }
+            if (coorY >= this.rows ) {
                 return false
             }
             for (let i = 0; i < shipLength; i++) {
@@ -123,6 +129,13 @@ export class Board {
 }
 
 
+
+export class Player {
+    constructor(name = 'Computer') {
+        this.name = name 
+        this.board = new Board()
+    }
+}
 
 
 
