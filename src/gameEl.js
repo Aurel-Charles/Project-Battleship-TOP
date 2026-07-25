@@ -15,6 +15,9 @@ export class Ship {
     }
 }
 
+
+
+
 class Cell {
     constructor() {
         this.value = null
@@ -42,6 +45,7 @@ export class Board {
                 this.board[i].push(cell);
             }
         }
+        this.missedShots = []
     }
     printBoard(){
         const boardWithValue = this.board.map((line) => line.map(((cell) => cell.getValue())))
@@ -51,14 +55,15 @@ export class Board {
         if (this.checkPlace(shipLength, [coorX, coorY], direction) === false) {
             return
         }
+        const ship = new Ship(shipLength)
         if (direction === 'horizontal') {
             for (let i = 0; i < shipLength; i++) {
-                this.board[coorX][coorY+i].changeValue(0)
+                this.board[coorX][coorY+i].changeValue(ship)
             }
         }
         if (direction === 'vertical') {
             for (let i = 0; i < shipLength; i++) {
-                this.board[coorX+i][coorY].changeValue(0)
+                this.board[coorX+i][coorY].changeValue(ship)
             }
         }
     }
@@ -86,6 +91,20 @@ export class Board {
                 }
             }
         }
+        return true
+    }
+    receiveAttack(coorX, coorY){
+        const cell = this.board[coorX][coorY]
+
+        console.log(cell);
+        
+
+        if (cell.getValue() === null) {
+            this.missedShots.push([coorX,coorY])
+            return false
+        }
+        cell.getValue().hit();
+        
         return true
     }
     reset(){

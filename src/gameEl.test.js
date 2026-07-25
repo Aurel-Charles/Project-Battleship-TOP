@@ -1,84 +1,96 @@
 import { Board, Ship } from "./gameEl.js";
 
-const ship = new Ship(4);
-const shipB = new Ship(1);
-const boardA = new Board()
 
 describe('Ship Testing', () => {
-    test('object Ship', () => {
-        expect(ship).toEqual({ length: 4, hits: 0, sunk: false } );
+    let ship, shipB;
+
+    beforeEach(() => {
+        ship = new Ship(4);
+        shipB = new Ship(1);
     });
-    test('object hit function', () => {
-        ship.hit()
-        ship.hit()
+
+    test('ship has correct initial shape', () => {
+        expect(ship).toEqual({ length: 4, hits: 0, sunk: false });
+    });
+
+    test('hit() increments hits', () => {
+        ship.hit();
+        ship.hit();
         expect(ship.hits).toEqual(2);
     });
-    test('object isSunk Function', () => {
+
+    test('isSunk() is false with no hits', () => {
         expect(ship.isSunk()).toEqual(false);
     });
-    test('object isSunk Function', () => {
-        ship.hit()
-        ship.hit()
+
+    test('isSunk() is true once hits reach length', () => {
+        ship.hit();
+        ship.hit();
+        ship.hit();
+        ship.hit();
         expect(ship.isSunk()).toEqual(true);
     });
 
-    test('object ShipB', () => {
-        expect(shipB).toEqual({ length: 1, hits: 0, sunk: false } );
-    });
-    test('object hit function', () => {
-        shipB.hit()
-        expect(shipB.hits).toEqual(1);
-    });
-    test('object isSunk Function', () => {
-        expect(shipB.isSunk()).toEqual(true);
-    });
-    test('object isSunk Function', () => {
-        shipB.hit()
-        shipB.hit()
-        expect(shipB.isSunk()).toEqual(true);
+    test('shipB has correct initial shape', () => {
+        expect(shipB).toEqual({ length: 1, hits: 0, sunk: false });
     });
 
+    test('shipB hit() increments hits', () => {
+        shipB.hit();
+        expect(shipB.hits).toEqual(1);
+    });
+
+    test('shipB isSunk() is true after one hit', () => {
+        shipB.hit();
+        expect(shipB.isSunk()).toEqual(true);
+    });
 });
 
 describe('Board Testing', () => {
+    let boardA;
 
     beforeEach(() => {
-        boardA.reset()
-      });
-    
-    // Gameboards should be able to place ships at specific coordinates by calling the ship factory or class.
-    test('Placing ship at coordinates (horizontal)', ()=> {
-        boardA.placeShip(4, [0, 0], 'horizontal')
-        expect(boardA.printBoard()[0]).toEqual([0, 0, 0, 0, null, null, null, null, null, null])
-    })
-    test('Placing ship at coordinates (horizontal)', ()=> {
+        boardA = new Board();
+    });
 
-        expect(boardA.printBoard()[0]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[1]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[2]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[3]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[4]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[5]).toEqual([null, null, null, null, null, null, null, null, null, null])
-        expect(boardA.printBoard()[6]).toEqual([null, null, null, null, null, null, null, null, null, null])
-    })
-    
-    test('check place ship', ()=> {
-        expect(boardA.checkPlace(4, [7, 0], 'vertical')).toEqual(false)
+    test('board starts empty', () => {
+        boardA.printBoard().forEach(row => {
+            expect(row).toEqual(new Array(10).fill(null));
+        });
+    });
 
-    })
+    test('placing a ship horizontally occupies the right cells', () => {
+        boardA.placeShip(4, [0, 0], 'horizontal');
+        const row = boardA.printBoard()[0];
+        row.slice(0, 4).forEach(cell => expect(cell).toBeInstanceOf(Ship));
+        row.slice(4).forEach(cell => expect(cell).toBeNull());
+    });
 
-    // test('Placing ship at coordinates (vertical)', ()=> {
-    //     boardA.placeShip(4, [0, 9], 'vertical')
-    //     expect(boardA.printBoard()[0]).toEqual([null, null, null, null, null, null, null, null, null, 0])
-    //     expect(boardA.printBoard()[1]).toEqual([null, null, null, null, null, null, null, null, null, 0])
-    //     expect(boardA.printBoard()[2]).toEqual([null, null, null, null, null, null, null, null, null, 0])
-    //     expect(boardA.printBoard()[3]).toEqual([null, null, null, null, null, null, null, null, null, 0])
+    test('checkPlace returns false when ship does not fit vertically', () => {
+        expect(boardA.checkPlace(4, [7, 0], 'vertical')).toEqual(false);
+    });
+});
 
-    // })
-    // Gameboards should have a receiveAttack function that takes a pair of coordinates, determines whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
-    // Gameboards should keep track of missed attacks so they can display them properly.
-    // Gameboards should be able to report whether or not all of their ships have been sunk.
+describe('Board Testing', () => {
+    let boardA;
 
+    beforeEach(() => {
+        boardA = new Board();
+        boardA.placeShip(4, [0, 0], 'horizontal');
+    });
 
+    test('check receivAttack() missing a hit', () => {
+        expect(boardA.receiveAttack(1, 0)).toEqual(false);
+    });
+    test('check receivAttack() missing a hit get the missed list', () => {
+        boardA.receiveAttack(1, 0)
+        expect(boardA.missedShots[0]).toEqual([1,0]);
+    });
+    test('check receivAttack() with a hit', () => {
+        expect(boardA.receiveAttack(0, 0)).toEqual(true);
 
+        const row = boardA.printBoard()[0];
+        row.slice(0, 4).forEach(cell => expect(cell).toBeInstanceOf(Ship));
+        expect(row[0].hits).toEqual(1);
+    });
 });
