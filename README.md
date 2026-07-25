@@ -22,6 +22,8 @@ npm install
 | `npm run build` | Génère le build de production dans `/dist` |
 | `npm run deploy` | Déploie sur GitHub Pages (branche `gh-pages`) |
 
+| `npm test` | Lance jest en automatique |
+
 ---
 
 ## Workflow Git
