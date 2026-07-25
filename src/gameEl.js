@@ -46,6 +46,8 @@ export class Board {
             }
         }
         this.missedShots = []
+        this.numberOfShips = 0
+        this.numberOfShipsSunk = 0
     }
     printBoard(){
         const boardWithValue = this.board.map((line) => line.map(((cell) => cell.getValue())))
@@ -53,7 +55,7 @@ export class Board {
     }
     placeShip(shipLength, [coorX, coorY], direction){
         if (this.checkPlace(shipLength, [coorX, coorY], direction) === false) {
-            return
+            return false
         }
         const ship = new Ship(shipLength)
         if (direction === 'horizontal') {
@@ -66,6 +68,7 @@ export class Board {
                 this.board[coorX+i][coorY].changeValue(ship)
             }
         }
+        return true
     }
     checkPlace(shipLength, [coorX, coorY], direction){
         if (coorX < 0 || coorY < 0) {
