@@ -9,13 +9,12 @@ export class Ship {
     }
     isSunk() {
         if (this.hits >= this.length){
+            this.sunk = true
             return true
         }
         return false
     }
 }
-
-
 
 
 class Cell {
@@ -68,6 +67,7 @@ export class Board {
                 this.board[coorX+i][coorY].changeValue(ship)
             }
         }
+        this.numberOfShips++
         return true
     }
     checkPlace(shipLength, [coorX, coorY], direction){
@@ -99,15 +99,18 @@ export class Board {
     receiveAttack(coorX, coorY){
         const cell = this.board[coorX][coorY]
 
-        console.log(cell);
-        
-
+        if (this.missedShots.includes(coorX, coorY)) {
+            return false
+        }
         if (cell.getValue() === null) {
             this.missedShots.push([coorX,coorY])
             return false
         }
-        cell.getValue().hit();
-        
+        const ship = cell.getValue()
+        ship.hit();
+        if(ship.isSunk()){
+            this.numberOfShipsSunk++
+        }
         return true
     }
     reset(){
@@ -118,7 +121,6 @@ export class Board {
         });
     }
 }
-
 
 
 

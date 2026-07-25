@@ -93,4 +93,25 @@ describe('Board Testing', () => {
         row.slice(0, 4).forEach(cell => expect(cell).toBeInstanceOf(Ship));
         expect(row[0].hits).toEqual(1);
     });
+    test('check number of ship on a board(1)', () => {
+        expect(boardA.numberOfShips).toEqual(1);
+    });
+    test('check number of ship on a board(2)', () => {
+        boardA.placeShip(4, [2, 0], 'horizontal');
+        expect(boardA.numberOfShips).toEqual(2);
+    });
+    test('check number of ship sunk on a board(1)', () => {
+        boardA.receiveAttack(0, 0)
+        boardA.receiveAttack(0, 1)
+        boardA.receiveAttack(0, 2)
+        boardA.receiveAttack(0, 3)
+        expect(boardA.numberOfShipsSunk).toEqual(1);
+    });
+    test('check number of ship sunk on a board(0)', () => {
+        boardA.receiveAttack(0, 0)
+        boardA.receiveAttack(0, 1)
+        boardA.receiveAttack(0, 2)
+        expect(boardA.numberOfShipsSunk).toEqual(0);
+    });
+
 });
