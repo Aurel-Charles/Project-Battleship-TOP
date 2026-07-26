@@ -1,19 +1,13 @@
-import { Board } from "./board.js";
-import { Player } from "./player.js";
-import { Ship } from "./ship.js";
-
-
+import { renderBoard } from "./dom.js";
+import { Game } from "./game.js";
 import "./style.css"
 
 console.log("Hello Odin!");
 
-const allShipLengths = [3, 5]
 
-const playerOne = new Player('aurel')
-const playerTwo = new Player('Computer', true)
+const game = new Game('aurel', 'computer', [5,4,3,3,2])
 
-console.log(playerOne);
-console.log(playerOne.randomAttack(playerTwo.board));
-console.log(playerTwo.randomPlaceShip(allShipLengths));
-console.log(playerTwo.board.printBoard());
+const mainDiv = document.querySelector('.main') 
+const boardPlayerOne = renderBoard(game.playerOne.board, game.playerOne.name)
 
+mainDiv.append(boardPlayerOne)
