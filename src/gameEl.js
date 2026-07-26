@@ -20,6 +20,7 @@ export class Ship {
 class Cell {
     constructor() {
         this.value = null
+        this.hit = false
     }
     getValue(){
         return this.value
@@ -27,8 +28,15 @@ class Cell {
     changeValue(newValue){
         this.value = newValue
     }
+    isHit(){
+        return this.hit
+    }
+    markHit(){
+        this.hit = true
+    }
     resetValue(){
         this.value = null
+        this.hit = false
     }
 }
 
@@ -47,6 +55,7 @@ export class Board {
         this.missedShots = []
         this.numberOfShips = 0
         this.numberOfShipsSunk = 0
+        this.allShipSunk = false 
     }
     printBoard(){
         const boardWithValue = this.board.map((line) => line.map(((cell) => cell.getValue())))
@@ -75,7 +84,7 @@ export class Board {
             return false
         }
         if (direction === 'horizontal') {
-            if (coorY > this.rows - shipLength) {
+            if (coorY > this.colums - shipLength) {
                 return false
             }
             if (coorX >= this.rows) {
@@ -88,7 +97,7 @@ export class Board {
             }
         }
         if (direction === 'vertical') {
-            if (coorX > this.colums - shipLength) {
+            if (coorX > this.rows - shipLength) {
                 return false
             }
             if (coorY >= this.rows ) {
@@ -104,20 +113,26 @@ export class Board {
     }
     receiveAttack(coorX, coorY){
         const cell = this.board[coorX][coorY]
-
-        if (this.missedShots.includes(coorX, coorY)) {
-            return false
+        if (cell.isHit()) {
+            return 'invalid'
         }
-        if (cell.getValue() === null) {
-            this.missedShots.push([coorX,coorY])
-            return false
-        }
+        cell.markHit()
         const ship = cell.getValue()
+
+        if (ship === null) {
+            this.missedShots.push([coorX,coorY])
+            return 'miss'
+        }
+
         ship.hit();
         if(ship.isSunk()){
             this.numberOfShipsSunk++
+            if (this.numberOfShips === this.numberOfShipsSunk) {
+                this.allShipSunk = true
+            }
+            return 'sunk'
         }
-        return true
+        return 'hit'
     }
     reset(){
         this.board.forEach(line => {
@@ -125,17 +140,54 @@ export class Board {
                 cell.resetValue()
             });
         });
+        this.missedShots = []
+        this.numberOfShips = 0
+        this.numberOfShipsSunk = 0
+        this.allShipSunk = false    
     }
 }
 
 
 
 export class Player {
-    constructor(name = 'Computer') {
+    constructor(name, isComputer = false) {
         this.name = name 
+        this.isComputer = isComputer
         this.board = new Board()
     }
+
+    randomPlaceShip(allShipLengths){
+        allShipLengths.forEach(length => {            
+            let placed = false
+            while (placed !== true) {
+                let coorX = Math.floor(Math.random() * this.board.rows)
+                let coorY = Math.floor(Math.random() * this.board.colums)
+                let direction = 'vertical'
+                if (Math.random() > 0.5) {
+                    direction = 'horizontal'
+                }
+                placed = this.board.placeShip(length,[coorX, coorY], direction)   
+            }
+        });
+    }
+
+    attack(opponentBoard, coorX, coorY){
+        return opponentBoard.receiveAttack(coorX,coorY)
+    }
+
+    randomAttack(opponentBoard){
+        let coorX
+        let coorY
+        let result
+        do {
+            coorX = Math.floor(Math.random() * opponentBoard.rows)
+            coorY = Math.floor(Math.random() * opponentBoard.colums)
+            result = opponentBoard.receiveAttack(coorX,coorY)
+        } while ( result === 'invalid' );
+        return {coorX, coorY , result}
+    }
 }
+
 
 
 

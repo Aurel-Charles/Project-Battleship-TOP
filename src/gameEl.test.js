@@ -92,14 +92,18 @@ describe('Board Testing', () => {
     })
 
     test('check receivAttack() missing a hit', () => {
-        expect(boardA.receiveAttack(1, 0)).toEqual(false);
+        expect(boardA.receiveAttack(1, 0)).toEqual('miss');
+    });
+    test('check receivAttack() invalid a hit', () => {
+        boardA.receiveAttack(1, 0)
+        expect(boardA.receiveAttack(1, 0)).toEqual('invalid');
     });
     test('check receivAttack() missing a hit get the missed list', () => {
         boardA.receiveAttack(1, 0)
         expect(boardA.missedShots[0]).toEqual([1,0]);
     });
     test('check receivAttack() with a hit', () => {
-        expect(boardA.receiveAttack(0, 0)).toEqual(true);
+        expect(boardA.receiveAttack(0, 0)).toEqual('hit');
 
         const row = boardA.printBoard()[0];
         row.slice(0, 4).forEach(cell => expect(cell).toBeInstanceOf(Ship));
