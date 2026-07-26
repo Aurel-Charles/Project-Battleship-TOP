@@ -1,5 +1,5 @@
 import { Game } from "./game.js";
-import { Ship } from "./gameEl.js";
+import { Ship } from "./ship.js";
 
 describe('Game Testing', () => {
     let game;

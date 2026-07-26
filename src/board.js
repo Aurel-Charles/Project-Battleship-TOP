@@ -1,45 +1,5 @@
-export class Ship {
-    constructor(length) {
-        this.length = length
-        this.hits = 0
-        this.sunk = false
-    }
-    hit() {
-        this.hits++ 
-        return this.hits
-    }
-    isSunk() {
-        if (this.hits >= this.length){
-            this.sunk = true
-            return true
-        }
-        return this.sunk
-    }
-}
-
-
-class Cell {
-    constructor() {
-        this.value = null
-        this.hit = false
-    }
-    getValue(){
-        return this.value
-    }
-    changeValue(newValue){
-        this.value = newValue
-    }
-    isHit(){
-        return this.hit
-    }
-    markHit(){
-        this.hit = true
-    }
-    resetValue(){
-        this.value = null
-        this.hit = false
-    }
-}
+import { Cell } from "./cell.js";
+import { Ship } from "./ship.js";
 
 export class Board {
     constructor() {
@@ -147,48 +107,3 @@ export class Board {
         this.allShipSunk = false    
     }
 }
-
-
-
-export class Player {
-    constructor(name, isComputer = false) {
-        this.name = name 
-        this.isComputer = isComputer
-        this.board = new Board()
-    }
-
-    randomPlaceShip(allShipLengths){
-        allShipLengths.forEach(length => {            
-            let placed = false
-            while (placed !== true) {
-                let coorX = Math.floor(Math.random() * this.board.rows)
-                let coorY = Math.floor(Math.random() * this.board.colums)
-                let direction = 'vertical'
-                if (Math.random() > 0.5) {
-                    direction = 'horizontal'
-                }
-                placed = this.board.placeShip(length,[coorX, coorY], direction)   
-            }
-        });
-    }
-
-    attack(opponentBoard, coorX, coorY){
-        return opponentBoard.receiveAttack(coorX,coorY)
-    }
-
-    randomAttack(opponentBoard){
-        let coorX
-        let coorY
-        let result
-        do {
-            coorX = Math.floor(Math.random() * opponentBoard.rows)
-            coorY = Math.floor(Math.random() * opponentBoard.colums)
-            result = opponentBoard.receiveAttack(coorX,coorY)
-        } while ( result === 'invalid' );
-        return {coorX, coorY , result}
-    }
-}
-
-
-
-

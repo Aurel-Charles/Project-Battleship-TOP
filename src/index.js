@@ -1,4 +1,8 @@
-import { Board, Player, Ship } from "./gameEl.js";
+import { Board } from "./board.js";
+import { Player } from "./player.js";
+import { Ship } from "./ship.js";
+
+
 import "./style.css"
 
 console.log("Hello Odin!");

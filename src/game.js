@@ -1,4 +1,5 @@
-import { Board, Player, Ship } from "./gameEl.js";
+import { Player } from "./player.js";
+
 
 export class Game {
     constructor(playerOneName, playerTwoName, shipsByLength) {
