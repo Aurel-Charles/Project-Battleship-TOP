@@ -1,18 +1,19 @@
 export class Ship {
-    constructor(length, hits = 0, sunk = false) {
+    constructor(length) {
         this.length = length
-        this.hits = hits
-        this.sunk = sunk
+        this.hits = 0
+        this.sunk = false
     }
     hit() {
-        return this.hits++ 
+        this.hits++ 
+        return this.hits
     }
     isSunk() {
         if (this.hits >= this.length){
             this.sunk = true
             return true
         }
-        return false
+        return this.sunk
     }
 }
 
@@ -100,7 +101,7 @@ export class Board {
             if (coorX > this.rows - shipLength) {
                 return false
             }
-            if (coorY >= this.rows ) {
+            if (coorY >= this.colums ) {
                 return false
             }
             for (let i = 0; i < shipLength; i++) {

@@ -1,5 +1,4 @@
-import { Board, Ship } from "./gameEl.js";
-
+import { Board, Player, Ship } from "./gameEl.js";
 
 describe('Ship Testing', () => {
     let ship, shipB;
@@ -46,7 +45,7 @@ describe('Ship Testing', () => {
     });
 });
 
-describe('Board Testing', () => {
+describe('Board Testing - placement', () => {
     let boardA;
 
     beforeEach(() => {
@@ -112,6 +111,11 @@ describe('Board Testing', () => {
     test('check number of ship on a board(1)', () => {
         expect(boardA.numberOfShips).toEqual(1);
     });
+    test('check number of ship on a board(1), didnt add another ship', () => {
+        const placed = boardA.placeShip(4, [0, 2], 'horizontal')
+        expect(placed).toEqual(false)
+        expect(boardA.numberOfShips).toEqual(1)
+    });
     test('check number of ship on a board(2)', () => {
         boardA.placeShip(4, [2, 0], 'horizontal');
         expect(boardA.numberOfShips).toEqual(2);
@@ -129,4 +133,87 @@ describe('Board Testing', () => {
         boardA.receiveAttack(0, 2)
         expect(boardA.numberOfShipsSunk).toEqual(0);
     });
+    test('check reset() board', () => {
+        boardA.reset()
+        const result = boardA.printBoard()
+        result.forEach(row => {
+            row.forEach(cell => {
+                expect(cell).toEqual(null);
+            });
+        });
+    });
+
+
+
+});
+
+describe('Board Testing vertical placement', () => {
+    let boardA;
+
+    beforeEach(() => {
+        boardA = new Board();
+        boardA.placeShip(3, [0, 0], 'vertical');
+    });
+    
+    test('check vertical placement', () => {
+        const result = boardA.printBoard()
+        expect(result[0][0]).toBeInstanceOf(Ship);
+        expect(result[1][0]).toBeInstanceOf(Ship);
+        expect(result[2][0]).toBeInstanceOf(Ship);
+        expect(result[3][0]).toEqual(null);
+        expect(result[4][0]).toEqual(null);
+    });
+});
+
+describe('Board Testing', () => {
+    let boardA;
+
+    beforeEach(() => {
+        boardA = new Board();
+        boardA.placeShip(1, [0, 0], 'horizontal');
+    });
+    
+    test('check allShipsSunk return false', () => {
+        expect(boardA.allShipSunk).toEqual(false);
+    });
+    test('check allShipsSunk return true', () => {
+        const result = boardA.receiveAttack(0, 0)
+        expect(result).toEqual('sunk')
+        expect(boardA.allShipSunk).toEqual(true)
+    });
+});
+
+describe('Player Testing', () => {
+    let playerA;
+    let playerB;
+
+
+    beforeEach(() => {
+        playerA = new Player();
+        playerB = new Player();
+    });
+
+
+
+    test('check N number of ship on the board', () => {
+        const ships = [5, 3, 3, 2, 1]
+        playerA.randomPlaceShip(ships)
+        expect(playerA.board.numberOfShips).toEqual(5);
+    });
+    
+    test('check a miss with attack(opponentBoard, coorX, coorY)', () => {
+        playerA.board.placeShip(5, [0,0], 'vertical')
+        expect(playerB.attack(playerA.board, 0, 1)).toEqual('miss');
+        expect(playerB.attack(playerA.board, 0, 0)).toEqual('hit');
+    });
+
+    test('randomAttack tombe sur une case prévisible quand Math.random est mocké', () => {
+        jest.spyOn(Math, 'random').mockReturnValue(0)
+        playerA.board.placeShip(5, [0, 0], 'horizontal')
+        const shot = playerB.randomAttack(playerA.board)
+
+        expect(shot).toEqual({ coorX: 0, coorY: 0, result: 'hit' })
+        
+        jest.restoreAllMocks()
+    })
 });
