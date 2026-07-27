@@ -22,6 +22,14 @@ export class Board {
         const boardWithValue = this.board.map((line) => line.map(((cell) => cell.getValue())))
         return boardWithValue
     }
+    getCellState(){
+        const boardWithValue = this.board.map((line) => line.map(((cell) => {
+            let hasShip = cell.getValue()===null? false : true
+            let isHit = cell.isHit()
+            return {hasShip, isHit}
+        })))
+        return boardWithValue
+    }
     placeShip(shipLength, [coorX, coorY], direction){
         if (this.checkPlace(shipLength, [coorX, coorY], direction) === false) {
             return false

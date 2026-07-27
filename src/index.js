@@ -1,4 +1,4 @@
-import { renderBoard } from "./dom.js";
+import { renderBoard, updateBoard } from "./dom.js";
 import { Game } from "./game.js";
 import "./style.css"
 
@@ -17,28 +17,28 @@ function attackCell(x,y, isComputer = false) {
     switch (attack) {
         case 'miss':
             console.log(('its a miss'));
-            // render the cell
+            updateBoard(game.playerTwo)
             break;
             
     
         case 'hit':
             console.log(('its a hit'));
-            // render the cell
+            updateBoard(game.playerTwo)
             break;
 
         case 'sunk':
             console.log(('its a sunk'));
-            // render the cell
+            updateBoard(game.playerTwo)
             break;
     
         case 'invalid':
             console.log(('its invalid'));
-            // do nothing
-            break;
+            return
     }
 
 
     attack = game.playerTwo.randomAttack(game.playerOne.board)
+    updateBoard(game.playerOne, true)
 
 
     return attack
@@ -54,3 +54,7 @@ const boardPlayerOne = renderBoard(game.playerOne.board, game.playerOne.name)
 const boardPlayerTwo = renderBoard(game.playerTwo.board, game.playerTwo.name, attackCell)
 
 mainDiv.append(boardPlayerOne, boardPlayerTwo)
+
+updateBoard(game.playerOne, true)
+updateBoard(game.playerTwo)
+

@@ -72,3 +72,15 @@
     width: 3rem;
     height: 3rem;
   }
+
+
+
+  .miss{
+    background-color: lightgray;
+  }
+  .hit{
+    background-color: lightcoral;
+  }
+  .ship{
+    background-color: grey;
+  }
