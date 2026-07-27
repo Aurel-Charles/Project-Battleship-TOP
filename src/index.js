@@ -7,41 +7,49 @@ console.log("Hello Odin!");
 
 
 const game = new Game('aurel', 'computer', [5,4,3,3,2])
+let gameOver = false
 
 function attackCell(x,y, isComputer = false) {
+    if (gameOver) {
+        return
+    }
     let attack
 
     attack = game.playerOne.attack(game.playerTwo.board, x, y)
-    console.log(attack);
 
     switch (attack) {
         case 'miss':
-            console.log(('its a miss'));
             updateBoard(game.playerTwo)
             break;
             
     
         case 'hit':
-            console.log(('its a hit'));
             updateBoard(game.playerTwo)
             break;
 
         case 'sunk':
-            console.log(('its a sunk'));
             updateBoard(game.playerTwo)
             break;
     
         case 'invalid':
-            console.log(('its invalid'));
             return
     }
 
-
+    if (game.playerTwo.board.allShipSunk) {
+        alert('player One WIN')
+        gameOver = true
+        return
+    }
+    
+    
     attack = game.playerTwo.randomAttack(game.playerOne.board)
     updateBoard(game.playerOne, true)
-
-
-    return attack
+    
+    if (game.playerOne.board.allShipSunk) {
+        alert('Computer WIN')
+        gameOver = true
+        return
+    }
 }
 
 game.playerOne.randomPlaceShip(game.shipsByLength)
