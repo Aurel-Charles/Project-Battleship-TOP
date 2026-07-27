@@ -52,3 +52,4 @@ export function updateBoard(player, showShips = false) {
         
     }   
 }
+
