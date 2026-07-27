@@ -18,9 +18,14 @@ export function renderBoard(board, playerName, onCellClick) {
             const cellEL = document.createElement('div')
             cellEL.dataset.x = i
             cellEL.dataset.y = j
+            // cellEL.dataset.value = board.board[i][j].getValue()
             cellEL.setAttribute('class', 'cell')
             boardEl.append(cellEL)
         }
     }
     return boardEl
+}
+
+export function name(params) {
+    
 }

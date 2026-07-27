@@ -62,12 +62,13 @@
 
   .board{
     display: grid;
-    grid-template-columns: repeat(10, 30px);
-    grid-template-rows: repeat(10, 30px);
+    grid-template-columns: repeat(10, 3rem);
+    grid-template-rows: repeat(10, 3rem);
+    margin: 2rem;
   }
 
   .cell{
     border: black 1px solid;
-    width: 30px;
-    height: 30px;
+    width: 3rem;
+    height: 3rem;
   }
