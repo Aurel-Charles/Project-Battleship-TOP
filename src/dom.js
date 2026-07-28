@@ -115,4 +115,17 @@ export function renderDock(shipLengths, onRotate) {
     return dockEl
 }
 
+export function clearDock() {
+    const dock = document.querySelector('#dock')
+    if (dock !== null) {
+        dock.remove()
+    }
+}
 
+// render winner div
+export function renderWinner(winnerTextEl, winner) {
+    winnerTextEl.textContent =  `${winner} win!!`
+}
+export function clearWinner(winnerTextEl) {   
+winnerTextEl.textContent =  ``
+}

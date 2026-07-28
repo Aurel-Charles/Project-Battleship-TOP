@@ -1,15 +1,24 @@
-import { renderBoard, renderDock, updateBoard } from "./dom.js";
+import { clearDock, renderBoard, renderDock, updateBoard,renderWinner, clearWinner } from "./dom.js";
 import { Game } from "./game.js";
 import "./style.css"
 
 console.log("Hello Odin!");
 
 function placeShipHandler(length, x, y) {
+    if (placementDone) {
+        return
+    }
     const placed =  game.playerOne.board.placeShip(length, [x, y], orientation)
     if (placed) {
         updateBoard(game.playerOne, true)
+        const allShipPlaced = checkPlacementShip(shipInDock, game.playerOne.board.numberOfShips)
+        if (allShipPlaced) {
+            placementDone = true
+            clearDock()
+        }
         return true
-    } 
+    }
+
     return false
 }
 
@@ -42,7 +51,7 @@ function attackCell(x,y, isComputer = false) {
     if (game.playerTwo.board.allShipSunk) {
         gameOver = true
         winner = game.playerOne.name
-        renderWinner()
+        renderWinner(winnerTextEl, winner)
         return
     }
     
@@ -53,7 +62,7 @@ function attackCell(x,y, isComputer = false) {
     if (game.playerOne.board.allShipSunk) {
         gameOver = true
         winner = game.playerTwo.name
-        renderWinner()
+        renderWinner(winnerTextEl)
         return
     }
 }
@@ -81,14 +90,23 @@ function onRotate() {
     }
 }
 
+function checkPlacementShip(shipInDock, numberOfShips) {
+    // return true or false
+    return shipInDock.length === numberOfShips
+}
+
 
 function resetGame(game) {
     gameOver = false
+    placementDone = false
     game.playerOne.board.reset()
     game.playerTwo.board.reset()
     // game.playerOne.randomPlaceShip(game.shipsByLength)
     game.playerTwo.randomPlaceShip(game.shipsByLength)
-    clearWinner(true)
+    clearWinner(winnerTextEl)
+    clearDock()
+    const dockEl = renderDock(shipInDock, onRotate)
+    mainDiv.prepend(dockEl)
 }
 
 
@@ -139,11 +157,4 @@ winnerEl.append(winnerTextEl)
 mainDiv.append(winnerEl)
 
 
-// render winner div
-function renderWinner() {
-        winnerTextEl.textContent =  `${winner} win!!`
-}
-function clearWinner() {   
-    winnerTextEl.textContent =  ``
-}
 
