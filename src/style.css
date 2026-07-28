@@ -84,3 +84,38 @@
   .ship{
     background-color: grey;
   }
+
+
+
+  /* dock */
+  
+/* vertical */
+.ship-dock-wrapper-v{
+  display: flex;
+  flex-direction: row;
+}
+.ship-in-dock-v{
+  display: flex;
+  flex-direction: column;
+  margin: 0.1rem;
+}
+
+/* horizontal */
+.ship-dock-wrapper-h{
+  display: flex;
+  flex-direction: column;
+}
+.ship-in-dock-h{
+  display: flex;
+  flex-direction: row;
+  margin: 0.1rem;
+}
+
+
+.unit{
+  border: black 1px solid;
+  background-color: lightblue;
+  width: 3rem;
+  height: 3rem;
+}
+

@@ -1,12 +1,20 @@
-import { renderBoard, updateBoard } from "./dom.js";
+import { renderBoard, renderDock, updateBoard } from "./dom.js";
 import { Game } from "./game.js";
 import "./style.css"
 
 console.log("Hello Odin!");
 
+function placeShipHandler(length, x, y) {
+    const placed =  game.playerOne.board.placeShip(length, [x, y], orientation)
+    if (placed) {
+        updateBoard(game.playerOne, true)
+        return true
+    } 
+    return false
+}
 
 function attackCell(x,y, isComputer = false) {
-    if (gameOver) {
+    if (gameOver || !placementDone) {
         return
     }
     let attack
@@ -50,11 +58,35 @@ function attackCell(x,y, isComputer = false) {
     }
 }
 
+function onRotate() {
+    orientation= orientation === 'horizontal'? 'vertical':'horizontal'
+    console.log(orientation);
+    const shipWrapperEl = document.querySelector('#ship-dock-wrapper')
+    const shipEl = document.querySelectorAll('.ship-in-dock')
+    console.log(shipEl, shipWrapperEl);
+    
+    if (orientation === 'horizontal') {
+        shipWrapperEl.className = 'ship-dock-wrapper-h'
+        shipEl.forEach(element => {
+            element.classList.remove('ship-in-dock-v')
+            element.classList.add('ship-in-dock-h') 
+        });
+    }
+    else{
+        shipWrapperEl.className = 'ship-dock-wrapper-v'
+        shipEl.forEach(element => {
+            element.classList.remove('ship-in-dock-h')
+            element.classList.add('ship-in-dock-v') 
+        });
+    }
+}
+
+
 function resetGame(game) {
     gameOver = false
     game.playerOne.board.reset()
     game.playerTwo.board.reset()
-    game.playerOne.randomPlaceShip(game.shipsByLength)
+    // game.playerOne.randomPlaceShip(game.shipsByLength)
     game.playerTwo.randomPlaceShip(game.shipsByLength)
     clearWinner(true)
 }
@@ -63,16 +95,24 @@ function resetGame(game) {
 
 
 // init the game
-const game = new Game('aurel', 'computer', [5,4,3,3,2])
+const shipInDock = [5,4,3,3,2]
+const game = new Game('aurel', 'computer', shipInDock)
 let gameOver = false
 let winner
-game.playerOne.randomPlaceShip(game.shipsByLength)
+let orientation = 'horizontal'
+let placementDone = false
+
+// game.playerOne.randomPlaceShip(game.shipsByLength)
 game.playerTwo.randomPlaceShip(game.shipsByLength)
 
 const mainDiv = document.querySelector('.main') 
 
+// render dock 
+const dockEl = renderDock(shipInDock, onRotate)
+mainDiv.append(dockEl)
+
 // render boards on page
-const boardPlayerOne = renderBoard(game.playerOne.board, game.playerOne.name)
+const boardPlayerOne = renderBoard(game.playerOne.board, game.playerOne.name, null, placeShipHandler)
 const boardPlayerTwo = renderBoard(game.playerTwo.board, game.playerTwo.name, attackCell)
 
 mainDiv.append(boardPlayerOne, boardPlayerTwo)
@@ -106,3 +146,4 @@ function renderWinner() {
 function clearWinner() {   
     winnerTextEl.textContent =  ``
 }
+
