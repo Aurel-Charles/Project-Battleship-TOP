@@ -216,8 +216,24 @@ export function renderPassScreen(playerName, onReady) {
     return passDiv
 }
 
+export function renderNewGameBtn(onNewGame) {
+    const btnResetGame = document.createElement('button')
+    btnResetGame.classList.add('btn-reset')
+    btnResetGame.textContent = 'New Game'
+    btnResetGame.addEventListener('click', ()=> {
+        onNewGame()
+    })
+    return btnResetGame
+}
+
 export function renderTurnResult(resultText, onNext, viewButton = true, isGameOver = false) {
     const turnResultWrapper = document.createElement('div')
+    if (isGameOver) {
+        turnResultWrapper.id = 'turn-end-game-wrapper'
+    }
+    else{
+        turnResultWrapper.id = 'turn-result-wrapper'
+    }
 
     const text = document.createElement('p')
     text.textContent = resultText

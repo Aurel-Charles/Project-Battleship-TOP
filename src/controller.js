@@ -1,4 +1,4 @@
-import { clearDock, renderBoard, renderDock, updateBoard,renderWinner, clearWinner, renderPlayerBoardWrapper, renderMenu, renderPassScreen, renderTurnResult } from "./dom.js";
+import { clearDock, renderBoard, renderDock, updateBoard,renderWinner, clearWinner, renderPlayerBoardWrapper, renderMenu, renderPassScreen, renderTurnResult, renderNewGameBtn } from "./dom.js";
 import { Game } from "./game.js";
 
 
@@ -175,7 +175,7 @@ export function initGame(mode) {
         game = new Game('Player1', 'Player2', shipInDock, true)
     }
     else{
-        game = new Game('Player', 'Computer', shipInDock)
+        game = new Game('Player1', 'Computer', shipInDock)
     }
     gameOver = false
     winner = null
@@ -217,18 +217,21 @@ function showPlayerPlacement(board, playerName) {
     
     mainDiv = document.querySelector('.main') 
     mainDiv.replaceChildren()
+    mainDiv.classList.add('main-placement')
     
-    const text = document.createElement('div')
+    const text = document.createElement('p')
     text.textContent = `${playerName}, place your ships!`
+    text.classList.add('text-player-place')
 
     // render dock 
     const dockEl = renderDock(shipInDock, onRotate)
     mainDiv.append(text, dockEl)
     
     // render boards on page
-    const boardPlayerOne = renderPlayerBoardWrapper(board, playerName, null, placeShipHandler, previewHandler)
-    
-    mainDiv.append(boardPlayerOne)
+    const boardPlayer = renderPlayerBoardWrapper(board, playerName, null, placeShipHandler, previewHandler)
+    boardPlayer.classList.add('placement')
+
+    mainDiv.append(boardPlayer)
 }
 
 
@@ -256,6 +259,10 @@ function renderBattleView(viewingPlayer){
  
     mainDiv = document.querySelector('.main') 
     mainDiv.replaceChildren()
+
+    const text = document.createElement('p')
+    text.textContent = `${viewingPlayer.name}, it's your turn to chose a cell !!! Try to find a ship on ${opponent.name}'s board`
+    text.classList.add('text-player-play')
     
     // render boards on page
     const boardViewingPlayer = renderPlayerBoardWrapper(viewingPlayer.board, viewingPlayer.name,
@@ -263,18 +270,13 @@ function renderBattleView(viewingPlayer){
     const boardOpponent = renderPlayerBoardWrapper(opponent.board, opponent.name,
         (x, y) => attackCell(opponent, x, y))
     
-    mainDiv.append(boardViewingPlayer, boardOpponent)
+    mainDiv.append(text, boardViewingPlayer, boardOpponent)
     
     updateBoard(viewingPlayer, true)
     updateBoard(opponent)
 
     // render button reset game
-    const btnResetGame = document.createElement('button')
-    btnResetGame.classList.add('btn-reset')
-    btnResetGame.textContent = 'New Game'
-    btnResetGame.addEventListener('click', ()=> {
-        showMenu()
-    })
+    const btnResetGame = renderNewGameBtn(()=> showMenu())
     mainDiv.append(btnResetGame)
     
     const winnerEl = document.createElement('div')
@@ -290,9 +292,9 @@ function showPassScreen(player) {
     mainDiv = document.querySelector('.main') 
     mainDiv.replaceChildren()
 
-    const passeSreen = renderPassScreen(player.name, ()=> renderBattleView(player) )
-
-    mainDiv.append(passeSreen)
+    const passeScreen = renderPassScreen(player.name, ()=> renderBattleView(player) )
+    
+    mainDiv.append(passeScreen)
 }
 
 function showResultGame() {
@@ -301,11 +303,14 @@ function showResultGame() {
 
     const winnerMsg = document.createElement('p')
     winnerMsg.textContent = `${winner} wins!`
+    winnerMsg.classList.add('winning-msg')
     // render boards on page
     const boardPlayerOne = renderPlayerBoardWrapper(game.playerOne.board, game.playerOne.name, null)
     const boardPlayerTwo = renderPlayerBoardWrapper(game.playerTwo.board, game.playerTwo.name, null)
     
-    mainDiv.append(winnerMsg, boardPlayerOne, boardPlayerTwo)
+    const btnResetGame = renderNewGameBtn(()=> showMenu())
+
+    mainDiv.append(winnerMsg, boardPlayerOne, boardPlayerTwo,btnResetGame)
     
     updateBoard(game.playerOne, true)
     updateBoard(game.playerTwo, true)
