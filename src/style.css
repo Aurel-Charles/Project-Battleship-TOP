@@ -82,7 +82,7 @@
     background-color: lightcoral;
   }
   .ship{
-    background-color: grey;
+    background-color: lightseagreen;
   }
 
 
@@ -119,3 +119,10 @@
   height: 3rem;
 }
 
+/* plavement ship preview */
+.valid-preview{
+  background-color: rgb(133, 224, 220);
+}
+.invalid-preview{
+  background-color: lightcoral;
+}

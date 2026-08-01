@@ -1,9 +1,10 @@
-import { initGame, startGame } from "./controller.js";
+import { initGame, showMenu, startGame } from "./controller.js";
 import "./style.css"
 
 console.log("Hello Odin!");
 
 
 
-initGame()
-startGame()
+showMenu()
+// initGame()
+// startGame()
