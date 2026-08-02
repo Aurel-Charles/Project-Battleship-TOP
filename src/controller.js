@@ -1,4 +1,4 @@
-import { clearDock, renderBoard, renderDock, updateBoard,renderWinner, clearWinner, renderPlayerBoardWrapper, renderMenu, renderPassScreen, renderTurnResult, renderNewGameBtn } from "./dom.js";
+import { clearDock, renderBoard, renderDock, updateBoard,renderWinner, clearWinner, renderPlayerBoardWrapper, renderMenu, renderPassScreen, renderTurnResult, renderNewGameBtn, renderOneShipInDock, createDockShip } from "./dom.js";
 import { Game } from "./game.js";
 
 
@@ -220,7 +220,7 @@ function showPlayerPlacement(board, playerName) {
     mainDiv.classList.add('main-placement')
     
     const text = document.createElement('p')
-    text.textContent = `${playerName}, place your ships!`
+    text.textContent = `${playerName}, place your ships! - To replace a ship, clic on it on the board`
     text.classList.add('text-player-place')
 
     // render dock 
@@ -228,7 +228,7 @@ function showPlayerPlacement(board, playerName) {
     mainDiv.append(text, dockEl)
     
     // render boards on page
-    const boardPlayer = renderPlayerBoardWrapper(board, playerName, null, placeShipHandler, previewHandler)
+    const boardPlayer = renderPlayerBoardWrapper(board, playerName, removeShipHandler, placeShipHandler, previewHandler)
     boardPlayer.classList.add('placement')
 
     mainDiv.append(boardPlayer)
@@ -320,4 +320,20 @@ function showResultGame() {
     
     updateBoard(game.playerOne, true)
     updateBoard(game.playerTwo, true)
+}
+
+function removeShipHandler(x, y){
+    const length = currentPlacingPlayer.board.removeShip(x, y)
+    if (length) {
+        updateBoard(currentPlacingPlayer, true)
+        const ship = createDockShip(length)
+        if (orientation === 'horizontal') {
+            ship.className = 'ship-in-dock ship-in-dock-h'
+        }
+        else{
+            ship.className = 'ship-in-dock ship-in-dock-v'
+        }
+        const dock = document.querySelector('#ship-dock-wrapper')
+        dock.append(ship)
+    }
 }

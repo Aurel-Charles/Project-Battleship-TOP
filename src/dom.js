@@ -127,20 +127,7 @@ export function renderDock(shipLengths, onRotate) {
     dockEl.append(shipWrapperEl)
     
     shipLengths.forEach(ship => {
-        const shipEl = document.createElement('div')
-        shipEl.classList.add('ship-in-dock-h')
-        shipEl.classList.add('ship-in-dock')
-        shipEl.draggable = true
-        shipEl.dataset.length = ship
-        shipEl.addEventListener('dragstart', (e)=> {
-            draggedShipEl = e.currentTarget
-            e.dataTransfer.setData('text/plain', e.currentTarget.dataset.length)
-        })
-        for (let i = 0; i < ship; i++) {
-            const unitOfShip = document.createElement('div')
-            unitOfShip.classList.add('unit')
-            shipEl.append(unitOfShip)
-        }
+        const shipEl = createDockShip(ship)
         shipWrapperEl.append(shipEl)
     });
     const btnRotate = document.createElement('button')
@@ -152,6 +139,24 @@ export function renderDock(shipLengths, onRotate) {
     dockEl.append(btnRotate)
 
     return dockEl
+}
+
+export function createDockShip(length){
+    const shipEl = document.createElement('div')
+    shipEl.classList.add('ship-in-dock-h')
+    shipEl.classList.add('ship-in-dock')
+    shipEl.draggable = true
+    shipEl.dataset.length = length
+    shipEl.addEventListener('dragstart', (e)=> {
+        draggedShipEl = e.currentTarget
+        e.dataTransfer.setData('text/plain', e.currentTarget.dataset.length)
+    })
+    for (let i = 0; i < length; i++) {
+        const unitOfShip = document.createElement('div')
+        unitOfShip.classList.add('unit')
+        shipEl.append(unitOfShip)
+    }
+    return shipEl
 }
 
 export function clearDock() {

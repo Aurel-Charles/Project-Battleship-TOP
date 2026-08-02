@@ -103,6 +103,23 @@ export class Board {
         }
         return 'hit'
     }
+
+    removeShip(coorX, coorY){
+        const ship = this.board[coorX][coorY].getValue()
+        if (ship === null) {
+            return false
+        }
+        this.board.forEach(row => {
+            row.forEach(cell => {
+                if (cell.getValue() === ship) {
+                    cell.resetValue()
+                }
+            });
+        });
+        this.numberOfShips --
+        return ship.length
+    }
+
     reset(){
         this.board.forEach(line => {
             line.forEach(cell => {
