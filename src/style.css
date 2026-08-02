@@ -111,6 +111,7 @@
     grid-template-columns: repeat(10, var(--cell-size));
     grid-template-rows: repeat(10, var(--cell-size));
     margin: 2rem;
+    border: solid 2px black;
   }
 
   .cell{
@@ -245,4 +246,9 @@
   flex-direction: column;
   place-items: center;
   font-size: var(--font-size-info);
+}
+
+
+.winner-board > .board  {
+  box-shadow: green 0 0 10px;
 }

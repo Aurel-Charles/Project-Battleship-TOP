@@ -307,6 +307,12 @@ function showResultGame() {
     // render boards on page
     const boardPlayerOne = renderPlayerBoardWrapper(game.playerOne.board, game.playerOne.name, null)
     const boardPlayerTwo = renderPlayerBoardWrapper(game.playerTwo.board, game.playerTwo.name, null)
+    if (winner === game.playerOne.name) {
+        boardPlayerOne.classList.add('winner-board')
+    }
+    else{
+        boardPlayerTwo.classList.add('winner-board')
+    }
     
     const btnResetGame = renderNewGameBtn(()=> showMenu())
 
