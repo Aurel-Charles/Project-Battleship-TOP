@@ -17,7 +17,7 @@ friend on the same device (pass-and-play). Made as part of
   - **Rotate** ships between horizontal and vertical orientation.
   - **Live placement preview** — cells highlight to show where a ship will land.
   - **Remove a misplaced ship** — click a placed ship to send it back to the dock.
-- **Turn feedback** — every shot reports *hit / miss / sunk*.
+- **Turn feedback** — every shot reports _hit / miss / sunk_.
 - **Win detection** and an end screen that reveals both fleets.
 - **New game** button to return to the mode menu at any time.
 
@@ -73,11 +73,11 @@ Then open the local address printed by Webpack (usually `http://localhost:8080`)
 
 ## Available scripts
 
-| Command | Description |
-|---|---|
-| `npm run dev` | Start the Webpack dev server with hot reload |
-| `npm run build` | Produce a production build in `/dist` |
-| `npm test` | Run Jest in watch mode |
+| Command          | Description                                           |
+| ---------------- | ----------------------------------------------------- |
+| `npm run dev`    | Start the Webpack dev server with hot reload          |
+| `npm run build`  | Produce a production build in `/dist`                 |
+| `npm test`       | Run Jest in watch mode                                |
 | `npm run deploy` | Build and publish to GitHub Pages (`gh-pages` branch) |
 
 To run the test suite once (without watch mode):
@@ -103,7 +103,7 @@ npx jest
 2. **Place your fleet**: drag each ship from the dock onto your grid. Use
    **Rotate** to change orientation, and click a placed ship to move it back to
    the dock.
-3. In *Human vs Human*, the second player places their fleet next, behind a
+3. In _Human vs Human_, the second player places their fleet next, behind a
    hand-off screen.
 4. **Battle**: click a cell on the opponent's grid to fire. The result is shown,
    then play passes to the other side.
